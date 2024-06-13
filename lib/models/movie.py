@@ -23,3 +23,18 @@ class  Movie(Base):
         session.add(movie)
         session.commit()
         return movie
+
+    @classmethod
+    def delete(cls, movie_id):
+        movie = session.query(cls).get(movie_id)
+        if movie:
+            session.delete(movie)
+            session.commit()
+
+    @classmethod
+    def get_all(cls):
+        return session.query(cls).all()
+
+    @classmethod
+    def find_by_id(cls, movie_id):
+        return session.query(cls).get(movie_id)
