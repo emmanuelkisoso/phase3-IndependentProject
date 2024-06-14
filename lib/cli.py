@@ -189,3 +189,43 @@ def print_movie_list(movies):
             "Watched": "Yes" if movie.watched else "No"
         }
         print(", ".join(f"{key}: {value}" for key, value in movie_info.items()))
+
+def create_genre():
+    genre_name = input("Enter the new genre name: ")
+    genre = Genre.create(genre_name)
+    print(f"New genre '{genre.name}' created.")
+
+def delete_genre():
+    genres = Genre.get_all()
+    genre_list = [(genre.id, genre.name) for genre in genres]
+
+    print("Select a genre to delete:")
+    for i, (genre_id, genre_name) in enumerate(genre_list, start=1):
+        print(f"{i}. {genre_name}")
+
+    choice = input("Enter the genre number: ")
+    try:
+        genre_id, genre_name = genre_list[int(choice) - 1]
+        Genre.delete(genre_id)
+        print(f"Genre '{genre_name}' deleted.")
+    except (IndexError, ValueError):
+        print("Invalid genre choice.")
+
+def list_genres():
+    genres = Genre.get_all()
+    if genres:
+        print("Genres:")
+        for genre in genres:
+            print(f"- {genre.name}")
+    else:
+        print("No genres found.")
+
+def print_movie_list(movies):
+    for movie in movies:
+        movie_info = {
+            "ID": movie.id,
+            "Title": movie.title,
+            "Genre": movie.genre.name,
+            "Watched": "Yes" if movie.watched else "No"
+        }
+        print(", ".join(f"{key}: {value}" for key, value in movie_info.items()))
