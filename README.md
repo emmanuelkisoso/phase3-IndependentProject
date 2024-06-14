@@ -14,7 +14,8 @@ A Python CLI application to manage movies and genres using an ORM-backend databa
 ## Directory Structure
 
 - `lib/cli.py`: Main application
-- `models/`: Model classes and ORM methods
+- `lib/database/movies.db`:Database
+- `lib/models/`: Model classes and ORM methods
 - `lib/helpers.py`: Helper functions
 - `requirements.txt`: Requirements
 
