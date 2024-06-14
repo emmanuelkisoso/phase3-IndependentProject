@@ -70,3 +70,59 @@ def genre_menu():
             return
         else:
             print("Invalid choice. Please try again.")
+
+def create_movie():
+    title = input("Enter the movie title: ")
+    director = input("Enter the director: ")
+    release_year = int(input("Enter the release year: "))
+    runtime = int(input("Enter the runtime (in minutes): "))
+
+    genres = session.query(Genre).all()
+    genre_options = [(genre.id, genre.name) for genre in genres]
+
+    print("Available genres:")
+    for genre_id, genre_name in genre_options:
+        print(f"{genre_id}. {genre_name}")
+
+    genre_id = int(input("Enter the genre ID: "))
+
+    movie = Movie.create(title, director, release_year, runtime, genre_id)
+    print(f"Movie '{movie.title}' created successfully.")
+
+def delete_movie():
+    movie_id = int(input("Enter the movie ID to delete: "))
+    Movie.delete(movie_id)
+    print("Movie deleted successfully.")
+
+def list_movies():
+    movies = Movie.get_all()
+    movie_data = []
+    for movie in movies:
+        movie_data.append({
+            "id" : movie.id,
+            "title" : movie.title,
+            "director" : movie.director,
+            "release_year" : movie.release_year,
+            "runtime" : movie.runtime,
+            "watched" : "Yes" if movie.watched else "No",
+            "genre" : movie.genre.name
+        })
+
+    if movie_data:
+        print("Movies:")
+        for movie in movie_data:
+            print(f"ID: {movie['id']}, Title: {movie['title']}, Director:{movie['director']}, " f"Release Year: {movie['release_year']}, Runtime:{movie['runtime']} minutes, " f"Watched: {movie['watched']}, Genre: {movie['genre']}")
+        else:
+            print("No movies found.")
+
+def find_movie_by_id():
+    pass
+
+def find_movies_by_title():
+    pass
+
+def find_movies_by_genre():
+    pass
+
+def update_movie_watched_status():
+    pass
