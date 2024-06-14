@@ -32,3 +32,17 @@ class Genre(Base):
     @classmethod
     def get_all(cls):
         return session.query(cls).all()
+
+    @classmethod
+    def create(cls, name):
+        genre = cls(name=name)
+        session.add(genre)
+        session.commit()
+        return genre
+
+    @classmethod
+    def delete(cls, genre_id):
+        genre = session.query(cls).get(genre_id)
+        if genre:
+            session.delete(genre)
+            session.commit()
