@@ -2,6 +2,7 @@
 
 from models.genre import Genre, session
 from models.movie import Movie
+from lib.helpers import print_movie_list, validate_movie_input, format_movie_info, print_genre_options
 
 MAIN_MENU_OPTIONS = ("Manage Movies", "Manage Genres", "Exit")
 MOVIE_MENU_OPTIONS = ("Add a new movie", "Delete a movie", "List all movies", "Find a movie by a ID", "Find movies by title", "Find movie by genre", "Mark a movie as watched/unwatched", "Go back to main menu")
@@ -72,18 +73,10 @@ def genre_menu():
             print("Invalid choice. Please try again.")
 
 def create_movie():
-    title = input("Enter the movie title: ")
-    director = input("Enter the director: ")
-    release_year = int(input("Enter the release year: "))
-    runtime = int(input("Enter the runtime (in minutes): "))
-
+    title, director, release_year, runtime = validate_movie_input()
     genres = session.query(Genre).all()
     genre_options = [(genre.id, genre.name) for genre in genres]
-
-    print("Available genres:")
-    for genre_id, genre_name in genre_options:
-        print(f"{genre_id}. {genre_name}")
-
+    print_genre_options(genre_options)
     genre_id = int(input("Enter the genre ID: "))
 
     movie = Movie.create(title, director, release_year, runtime, genre_id)
@@ -96,34 +89,14 @@ def delete_movie():
 
 def list_movies():
     movies = Movie.get_all()
-    movie_data = []
-    for movie in movies:
-        movie_data.append({
-            "id" : movie.id,
-            "title" : movie.title,
-            "director" : movie.director,
-            "release_year" : movie.release_year,
-            "runtime" : movie.runtime,
-            "watched" : "Yes" if movie.watched else "No",
-            "genre" : movie.genre.name
-        })
-
-    if movie_data:
-        print("Movies:")
-        for movie in movie_data:
-            print(f"ID: {movie['id']}, Title: {movie['title']}, Director:{movie['director']}, " f"Release Year: {movie['release_year']}, Runtime:{movie['runtime']} minutes, " f"Watched: {movie['watched']}, Genre: {movie['genre']}")
-        else:
-            print("No movies found.")
+    movie_data = [format_movie_info(movie) for movie in movies]
+    print_movie_list(movie_data)
 
 def find_movie_by_id():
     movie_id = input("Enter the movie ID: ")
     movie = Movie.find_by_id(movie_id)
     if movie:
-        movie_info = {
-            "Title": movie.title,
-            "Genre": movie.genre.name,
-            "Watched": "Yes" if movie.watched else "No"
-        }
+        movie_info = format_movie_info(movie)
         for key, value in movie_info.items():
             print(f"{key}: {value}")
     else:
