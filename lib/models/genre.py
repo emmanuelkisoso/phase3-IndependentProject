@@ -28,3 +28,7 @@ class Genre(Base):
         if genre:
             session.delete(genre)
             session.commit()
+
+    @classmethod
+    def get_all(cls):
+        return session.query(cls).all()
