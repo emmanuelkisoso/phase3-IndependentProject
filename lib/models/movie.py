@@ -38,3 +38,19 @@ class  Movie(Base):
     @classmethod
     def find_by_id(cls, movie_id):
         return session.query(cls).get(movie_id)
+
+    @classmethod
+    def find_movies_by_title(cls, title):
+        return session.query(cls).filter(cls.title.ilike(f'%{title}%')).all()
+
+    @classmethod
+    def find_movies_by_genre(cls, genre_id):
+        return session.query(cls).filter_by(genre_id=genre_id).all()
+
+    @classmethod
+    def update_watched_status(cls, movie_id, watched):
+        movie = session.query(cls).get(movie_id)
+        if movie:
+            movie.watched = watched
+            session.commit()
+        return movie
